@@ -4,11 +4,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.gustavolima.roomproject.database.AppDatabase
 import com.gustavolima.roomproject.database.daos.UserDao
+import com.gustavolima.roomproject.database.models.User
 import com.gustavolima.roomproject.databinding.ActivityNewUserBinding
 
 class NewUserActivity : AppCompatActivity() {
-private lateinit var binding: ActivityNewUserBinding
-private lateinit var database: AppDatabase
+    private lateinit var binding: ActivityNewUserBinding
+    private lateinit var database: AppDatabase
     private lateinit var userDao: UserDao
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -17,5 +18,25 @@ private lateinit var database: AppDatabase
 
         database = AppDatabase.getInstance(this)
         userDao = database.UserDao()
+    }
+
+    override fun onStart() {
+        super.onStart()
+
+        binding.buttonSave.setOnClickListener {
+
+        }
+
+    }
+
+    private suspend fun saveUser(firstName: String, lastName: String): Boolean {
+        if (firstName.isBlank() || firstName.isEmpty()) {
+            return false
+        }
+        if (lastName.isBlank() || lastName.isEmpty()) {
+            return false
+        }
+        userDao.insert(User(firstName, lastName))
+        return true
     }
 }
