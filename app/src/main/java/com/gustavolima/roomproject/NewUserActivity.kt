@@ -2,10 +2,15 @@ package com.gustavolima.roomproject
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Toast
 import com.gustavolima.roomproject.database.AppDatabase
 import com.gustavolima.roomproject.database.daos.UserDao
 import com.gustavolima.roomproject.database.models.User
 import com.gustavolima.roomproject.databinding.ActivityNewUserBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class NewUserActivity : AppCompatActivity() {
     private lateinit var binding: ActivityNewUserBinding
@@ -24,7 +29,22 @@ class NewUserActivity : AppCompatActivity() {
         super.onStart()
 
         binding.buttonSave.setOnClickListener {
-
+            CoroutineScope(Dispatchers.IO).launch {
+                val result = saveUser(
+                    binding.editFirstName.text.toString(),
+                    binding.editLastName.toString()
+                )
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(
+                        this@NewUserActivity,
+                        if (result) "User saved!" else "Error trying to save the user",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    if (result) {
+                        finish()
+                    }
+                }
+            }
         }
 
     }
