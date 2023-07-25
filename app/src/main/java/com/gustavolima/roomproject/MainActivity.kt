@@ -9,6 +9,10 @@ import androidx.room.Dao
 import com.gustavolima.roomproject.database.AppDatabase
 import com.gustavolima.roomproject.database.daos.UserDao
 import com.gustavolima.roomproject.databinding.ActivityMainBinding
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -23,15 +27,13 @@ class MainActivity : AppCompatActivity() {
         this.userDao = this.database.UserDao()
 
 
-
-
     }
 
     override fun onStart() {
         super.onStart()
 
         loadTotalUsers()
-       openNewUserActivity()
+        openNewUserActivity()
     }
 
     private fun openNewUserActivity() {
@@ -43,6 +45,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun loadTotalUsers() {
+        binding.textInfoTotalUsers.text = "Carregando..."
+        CoroutineScope(Dispatchers.IO).launch {
+            val total = userDao.getTotalItens()
+            withContext(Dispatchers.Main){
+                binding.textInfoTotalUsers.text = "Total de usuários: $total"
+            }
+
+        }
 
     }
 }
