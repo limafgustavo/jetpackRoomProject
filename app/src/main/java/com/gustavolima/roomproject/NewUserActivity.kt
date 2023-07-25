@@ -32,7 +32,7 @@ class NewUserActivity : AppCompatActivity() {
             CoroutineScope(Dispatchers.IO).launch {
                 val result = saveUser(
                     binding.editFirstName.text.toString(),
-                    binding.editLastName.toString()
+                    binding.editLastName.text.toString()
                 )
                 withContext(Dispatchers.Main) {
                     Toast.makeText(
