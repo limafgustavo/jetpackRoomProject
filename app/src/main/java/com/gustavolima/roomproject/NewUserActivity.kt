@@ -1,5 +1,6 @@
 package com.gustavolima.roomproject
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
@@ -41,6 +42,11 @@ class NewUserActivity : AppCompatActivity() {
                         Toast.LENGTH_SHORT
                     ).show()
                     if (result) {
+
+                            withContext(Dispatchers.Main){
+                                startActivity()
+                            }
+
                         finish()
                     }
                 }
@@ -49,6 +55,9 @@ class NewUserActivity : AppCompatActivity() {
 
     }
 
+    private fun startActivity(){
+        startActivity(Intent(this, MainActivity::class.java))
+    }
     private suspend fun saveUser(firstName: String, lastName: String): Boolean {
         if (firstName.isBlank() || firstName.isEmpty()) {
             return false
